@@ -1,5 +1,5 @@
 name := quickemu-logos-font
-dest := assets
+dest := src
 out_json_ext := .out.json
 font_exts := .ttf .woff .woff2 $(out_json_ext)
 font_assets := $(foreach ext,$(font_exts),$(dest)/$(name)$(ext))

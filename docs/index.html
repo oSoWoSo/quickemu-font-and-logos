@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>quickemu-font-and-logos</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+<script>
+  function toggleTheme(){
+    const html=document.documentElement;
+    const current=html.getAttribute("data-theme")||"dark";
+    const next=current==="dark"?"light":"dark";
+    html.setAttribute("data-theme",next);
+    localStorage.setItem("theme",next)
+  }
+  (function(){
+    const saved=localStorage.getItem("theme")||"dark";
+    document.documentElement.setAttribute("data-theme",saved)
+  })();
+</script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toc = document.getElementById("TOC");
+    if (!toc) return;
+
+    // Add toc-title with toggle button
+    const titleEl = document.createElement("div");
+    titleEl.id = "toc-title";
+    titleEl.innerHTML = '<span>Contents</span><span id="toc-toggle-icon">◀</span>';
+    toc.insertBefore(titleEl, toc.firstChild);
+
+    // Wrap TOC + the rest of the content in .page-wrapper
+    const body = document.body;
+    const wrapper = document.createElement("div");
+    wrapper.className = "page-wrapper";
+
+    // Find all elements after <nav> (main nav menu)
+    const topNav = document.querySelector("body > nav");
+    const siblings = [];
+    let el = topNav ? topNav.nextElementSibling : body.firstElementChild;
+    while (el) {
+      siblings.push(el);
+      el = el.nextElementSibling;
+    }
+
+    siblings.forEach((s) => wrapper.appendChild(s));
+    body.appendChild(wrapper);
+
+    // Wrap main content (everything except TOC) in .main-content
+    const mainContent = document.createElement("div");
+    mainContent.className = "main-content";
+    Array.from(wrapper.children).forEach((child) => {
+      if (child.id !== "TOC") mainContent.appendChild(child);
+    });
+    wrapper.appendChild(mainContent);
+
+    // Collapsible toggle
+    const icon = document.getElementById("toc-toggle-icon");
+    const saved = localStorage.getItem("toc-collapsed");
+    if (saved === "true") {
+      toc.classList.add("collapsed");
+      icon.textContent = "▶";
+    }
+
+    titleEl.addEventListener("click", function () {
+      toc.classList.toggle("collapsed");
+      const isCollapsed = toc.classList.contains("collapsed");
+      icon.textContent = isCollapsed ? "▶" : "◀";
+      localStorage.setItem("toc-collapsed", isCollapsed);
+    });
+  });
+</script>
+<nav><ul>
+  <li><a href="https://osowoso.org">oSoWoSo</a></li>
+  <li><a href="index.html" class="active">Home</a></li>
+  <li><a href="https://github.com/oSoWoSo/quickemu-font-and-logos/releases/latest">⏬ release</a></li>
+  <li><a href="https://github.com/oSoWoSo/quickemu-font-and-logos/archive/refs/heads/main.zip">📦repo zip</a></li>
+  <li><a href="https://github.com/oSoWoSo/quickemu-font-and-logos">🔗git</a></li>
+  <li>⏭️</a></li>
+</ul></nav>
+<header id="title-block-header">
+<h1 class="title">quickemu-font-and-logos</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#quickemu-logos-font"
+id="toc-quickemu-logos-font">quickemu-logos-font</a>
+<ul>
+<li><a href="#installation" id="toc-installation">Installation</a></li>
+<li><a href="#usage" id="toc-usage">Usage</a></li>
+<li><a href="#building" id="toc-building">Building</a></li>
+<li><a href="#releasing" id="toc-releasing">Releasing</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="quickemu-logos-font">quickemu-logos-font</h1>
+<p><img src="https://font.osowoso.org/readme-header.png"
+alt="Available logos" /></p>
+<p>quickemu-logos-font is an icon font containing logos of popular
+Operating Systems.</p>
+<p><em>Note:</em> All brand icons are trademarks of their respective
+owners and should only be used to represent the company or product to
+which they refer.</p>
+<h2 id="installation">Installation</h2>
+<p>Install the font by downloading and unpacking the latest release's
+zip manually or installing it from npm:</p>
+<pre><code>npm install quickemu-logos-font</code></pre>
+<p>To use the font, include <code>assets/quickemu-logos-font.css</code>
+as well as the fonts in your project and use the CSS classes listed
+below.</p>
+<pre><code>&lt;link href=&quot;/assets/quickemu-logos-font.css&quot; rel=&quot;stylesheet&quot;&gt;</code></pre>
+<p>Alternatively just link to it using a CDN such as <a
+href="//jsdelivr.com">jsDelivr</a>:</p>
+<pre><code>&lt;link href=&quot;//cdn.jsdelivr.net/npm/quickemu-logos-font@0.0.3/assets/quickemu-logos-font.css&quot; rel=&quot;stylesheet&quot;&gt;</code></pre>
+<h2 id="usage">Usage</h2>
+<p>Include an icon using the corresponding CSS class in an empty
+element:</p>
+<pre><code>&lt;i class=&quot;fl-[icon]&quot;&gt;&lt;/i&gt;</code></pre>
+<p>Add <code>fl-fw</code> as class for a fixed width icon.</p>
+<p>If you want to insert a glyph of this font on a GNU/Linux system
+press <code>Ctrl + Shift + u</code>, release the keys and then type the
+code point, for instance: <code>Ctrl + Shift + u</code> and
+<code>f31a</code> will insert the <code>Tux</code> glyph.</p>
+<p>Available logos are:</p>
+<table>
+<thead>
+<tr>
+<th>Distribution</th>
+<th>CSS class</th>
+<th>Code</th>
+<th style="text-align: center;">Code point</th>
+<th style="text-align: center;">Image</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agarim OS</td>
+<td><code>fl-agarimos</code></td>
+<td><code>&lt;i class="fl-agarimos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf302</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/agarimos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Alma Linux</td>
+<td><code>fl-almalinux</code></td>
+<td><code>&lt;i class="fl-almalinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf303</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/almalinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Alpine</td>
+<td><code>fl-alpine</code></td>
+<td><code>&lt;i class="fl-alpine"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf304</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/alpine.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Android</td>
+<td><code>fl-android</code></td>
+<td><code>&lt;i class="fl-android"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf305</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/android.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Antix</td>
+<td><code>fl-antix</code></td>
+<td><code>&lt;i class="fl-antix"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf306</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/antix.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Archbang</td>
+<td><code>fl-archbang</code></td>
+<td><code>&lt;i class="fl-archbang"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf307</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/archbang.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Archcraft</td>
+<td><code>fl-archcraft</code></td>
+<td><code>&lt;i class="fl-archcraft"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf308</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/archcraft.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>ArchLabs</td>
+<td><code>fl-archlabs</code></td>
+<td><code>&lt;i class="fl-archlabs"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf309</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/archlabs.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Arch Linux</td>
+<td><code>fl-archlinux</code></td>
+<td><code>&lt;i class="fl-archlinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf30a</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/archlinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Arco Linux</td>
+<td><code>fl-arcolinux</code></td>
+<td><code>&lt;i class="fl-arcolinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf30b</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/arcolinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Artix Linux</td>
+<td><code>fl-artixlinux</code></td>
+<td><code>&lt;i class="fl-artixlinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf30c</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/artixlinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Arya Linux</td>
+<td><code>fl-aryalinux</code></td>
+<td><code>&lt;i class="fl-aryalinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf30d</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/aryalinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Asahi Linux</td>
+<td><code>fl-asahilinux</code></td>
+<td><code>&lt;i class="fl-asahilinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf365</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/asahilinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Athena OS</td>
+<td><code>fl-athenaos</code></td>
+<td><code>&lt;i class="fl-athenaos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf30e</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/athenaos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>BackBox</td>
+<td><code>fl-backbox</code></td>
+<td><code>&lt;i class="fl-backbox"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf30f</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/backbox.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>BigLinux</td>
+<td><code>fl-biglinux</code></td>
+<td><code>&lt;i class="fl-biglinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf310</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/biglinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Bodhi Linux</td>
+<td><code>fl-bodhi</code></td>
+<td><code>&lt;i class="fl-bodhi"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf311</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/bodhi.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>bunsenlabs</td>
+<td><code>fl-bunsenlabs</code></td>
+<td><code>&lt;i class="fl-bunsenlabs"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf312</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/bunsenlabs.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>CentOS</td>
+<td><code>fl-centos</code></td>
+<td><code>&lt;i class="fl-centos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf313</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/centos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Cereus Linux</td>
+<td><code>fl-cereus</code></td>
+<td><code>&lt;i class="fl-cereus"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf314</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/cereus.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>CoreOS</td>
+<td><code>fl-coreos</code></td>
+<td><code>&lt;i class="fl-coreos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf315</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/coreos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Crystal Linux</td>
+<td><code>fl-crystal</code></td>
+<td><code>&lt;i class="fl-crystal"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf316</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/crystal.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Debian</td>
+<td><code>fl-debian</code></td>
+<td><code>&lt;i class="fl-debian"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf317</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/debian.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Deepin</td>
+<td><code>fl-deepin</code></td>
+<td><code>&lt;i class="fl-deepin"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf366</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/deepin.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Devuan</td>
+<td><code>fl-devuan</code></td>
+<td><code>&lt;i class="fl-devuan"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf318</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/devuan.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>DietPi</td>
+<td><code>fl-dietpi</code></td>
+<td><code>&lt;i class="fl-dietpi"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf319</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/dietpi.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>elementary OS</td>
+<td><code>fl-elementary</code></td>
+<td><code>&lt;i class="fl-elementary"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf31b</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/elementary.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Endeavour OS</td>
+<td><code>fl-endeavouros</code></td>
+<td><code>&lt;i class="fl-endeavouros"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf31c</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/endeavouros.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>/e/ OS</td>
+<td><code>fl-eos</code></td>
+<td><code>&lt;i class="fl-eos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf31a</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/eos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Fedora</td>
+<td><code>fl-fedora</code></td>
+<td><code>&lt;i class="fl-fedora"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf31d</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/fedora.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>FreeBSD</td>
+<td><code>fl-freebsd</code></td>
+<td><code>&lt;i class="fl-freebsd"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf31e</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/freebsd.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>FreeDOS</td>
+<td><code>fl-freedos</code></td>
+<td><code>&lt;i class="fl-freedos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf31f</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/freedos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Garuda Linux</td>
+<td><code>fl-garuda</code></td>
+<td><code>&lt;i class="fl-garuda"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf320</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/garuda.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Gentoo</td>
+<td><code>fl-gentoo</code></td>
+<td><code>&lt;i class="fl-gentoo"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf321</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/gentoo.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>GhostBSD</td>
+<td><code>fl-ghostbsd</code></td>
+<td><code>&lt;i class="fl-ghostbsd"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf322</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ghostbsd.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>GNU Guix</td>
+<td><code>fl-gnuguix</code></td>
+<td><code>&lt;i class="fl-gnuguix"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf323</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/gnuguix.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Haiku</td>
+<td><code>fl-haiku</code></td>
+<td><code>&lt;i class="fl-haiku"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf324</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/haiku.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Hyperbola GNU/Linux-libre</td>
+<td><code>fl-hyperbola</code></td>
+<td><code>&lt;i class="fl-hyperbola"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf325</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/hyperbola.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>illumos</td>
+<td><code>fl-illumos</code></td>
+<td><code>&lt;i class="fl-illumos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf326</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/illumos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>KaiOS</td>
+<td><code>fl-kaios</code></td>
+<td><code>&lt;i class="fl-kaios"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf367</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/kaios.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Kali Linux</td>
+<td><code>fl-kalilinux</code></td>
+<td><code>&lt;i class="fl-kalilinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf327</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/kalilinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>KDE Neon</td>
+<td><code>fl-kdeneon</code></td>
+<td><code>&lt;i class="fl-kdeneon"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf368</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/kdeneon.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Kubuntu</td>
+<td><code>fl-kubuntu</code></td>
+<td><code>&lt;i class="fl-kubuntu"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf355</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/kubuntu.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Lineage OS</td>
+<td><code>fl-lineageos</code></td>
+<td><code>&lt;i class="fl-lineageos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf369</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/lineageos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Linux Lite</td>
+<td><code>fl-linuxlite</code></td>
+<td><code>&lt;i class="fl-linuxlite"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf328</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/linuxlite.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Linux Mint</td>
+<td><code>fl-linuxmint</code></td>
+<td><code>&lt;i class="fl-linuxmint"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf329</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/linuxmint.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Linux Mint Debian Edition</td>
+<td><code>fl-lmde</code></td>
+<td><code>&lt;i class="fl-lmde"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf32a</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/lmde.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Locos</td>
+<td><code>fl-locos</code></td>
+<td><code>&lt;i class="fl-locos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf36a</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/locos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Lubuntu</td>
+<td><code>fl-lubuntu</code></td>
+<td><code>&lt;i class="fl-lubuntu"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf356</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/lubuntu.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>LXLE Linux</td>
+<td><code>fl-lxle</code></td>
+<td><code>&lt;i class="fl-lxle"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf32b</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/lxle.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Mabox</td>
+<td><code>fl-mabox</code></td>
+<td><code>&lt;i class="fl-mabox"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf32c</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/mabox.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>macOS</td>
+<td><code>fl-macos</code></td>
+<td><code>&lt;i class="fl-macos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf32d</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/macos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Mageia</td>
+<td><code>fl-mageia</code></td>
+<td><code>&lt;i class="fl-mageia"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf32e</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/mageia.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Mandriva</td>
+<td><code>fl-mandriva</code></td>
+<td><code>&lt;i class="fl-mandriva"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf32f</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/mandriva.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Manjaro</td>
+<td><code>fl-manjaro</code></td>
+<td><code>&lt;i class="fl-manjaro"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf330</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/manjaro.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>MidnightBSD</td>
+<td><code>fl-midnightbsd</code></td>
+<td><code>&lt;i class="fl-midnightbsd"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf331</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/midnightbsd.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>MX Linux</td>
+<td><code>fl-mxlinux</code></td>
+<td><code>&lt;i class="fl-mxlinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf332</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/mxlinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>netboot.xyz</td>
+<td><code>fl-netbootxyz</code></td>
+<td><code>&lt;i class="fl-netbootxyz"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf334</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/netbootxyz.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>netBSD</td>
+<td><code>fl-netbsd</code></td>
+<td><code>&lt;i class="fl-netbsd"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf333</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/netbsd.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>NitruX</td>
+<td><code>fl-nitrux</code></td>
+<td><code>&lt;i class="fl-nitrux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf335</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/nitrux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>NixOS</td>
+<td><code>fl-nixos</code></td>
+<td><code>&lt;i class="fl-nixos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf336</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/nixos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Nobara</td>
+<td><code>fl-nobara</code></td>
+<td><code>&lt;i class="fl-nobara"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf337</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/nobara.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>OpenBSD</td>
+<td><code>fl-openbsd</code></td>
+<td><code>&lt;i class="fl-openbsd"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf339</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/openbsd.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Open Mandriva</td>
+<td><code>fl-openmandriva</code></td>
+<td><code>&lt;i class="fl-openmandriva"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf338</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/openmandriva.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>OpenSUSE</td>
+<td><code>fl-opensuse</code></td>
+<td><code>&lt;i class="fl-opensuse"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf33a</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/opensuse.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Parabola GNU/Linux-libre</td>
+<td><code>fl-parabola</code></td>
+<td><code>&lt;i class="fl-parabola"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf33b</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/parabola.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Parrot security</td>
+<td><code>fl-parrotsecurity</code></td>
+<td><code>&lt;i class="fl-parrotsecurity"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf33c</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/parrotsecurity.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>PCLinuxOS</td>
+<td><code>fl-pclinuxos</code></td>
+<td><code>&lt;i class="fl-pclinuxos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf33e</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/pclinuxos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Pop!_OS</td>
+<td><code>fl-popos</code></td>
+<td><code>&lt;i class="fl-popos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf33f</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/popos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>PostmarketOS</td>
+<td><code>fl-postmarketos</code></td>
+<td><code>&lt;i class="fl-postmarketos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf340</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/postmarketos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Puppy Linux</td>
+<td><code>fl-puppy</code></td>
+<td><code>&lt;i class="fl-puppy"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf33d</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/puppy.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>PureOS</td>
+<td><code>fl-pureos</code></td>
+<td><code>&lt;i class="fl-pureos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf341</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/pureos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Q4OS</td>
+<td><code>fl-q4os</code></td>
+<td><code>&lt;i class="fl-q4os"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf342</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/q4os.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>QubesOS</td>
+<td><code>fl-qubesos</code></td>
+<td><code>&lt;i class="fl-qubesos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf343</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/qubesos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>quickemu project logo</td>
+<td><code>fl-quickemu</code></td>
+<td><code>&lt;i class="fl-quickemu"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf301</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/quickemu.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Raspberry pi</td>
+<td><code>fl-raspberry-pi</code></td>
+<td><code>&lt;i class="fl-raspberry-pi"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf344</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/raspberry-pi.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>ReactOS</td>
+<td><code>fl-reactos</code></td>
+<td><code>&lt;i class="fl-reactos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf36b</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/reactos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>RebornOS</td>
+<td><code>fl-rebornos</code></td>
+<td><code>&lt;i class="fl-rebornos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf345</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/rebornos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Regolith</td>
+<td><code>fl-regolith</code></td>
+<td><code>&lt;i class="fl-regolith"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf346</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/regolith.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Rocky Linux</td>
+<td><code>fl-rockylinux</code></td>
+<td><code>&lt;i class="fl-rockylinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf347</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/rockylinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Sabayon</td>
+<td><code>fl-sabayon</code></td>
+<td><code>&lt;i class="fl-sabayon"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf348</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/sabayon.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Sailfish OS</td>
+<td><code>fl-sailfishos</code></td>
+<td><code>&lt;i class="fl-sailfishos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf36c</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/sailfishos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>siduction</td>
+<td><code>fl-siduction</code></td>
+<td><code>&lt;i class="fl-siduction"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf34c</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/siduction.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Slackware</td>
+<td><code>fl-slackware</code></td>
+<td><code>&lt;i class="fl-slackware"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf349</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/slackware.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Slint</td>
+<td><code>fl-slint</code></td>
+<td><code>&lt;i class="fl-slint"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf36d</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/slint.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Slitaz</td>
+<td><code>fl-slitaz</code></td>
+<td><code>&lt;i class="fl-slitaz"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf34a</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/slitaz.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>smartos</td>
+<td><code>fl-smartos</code></td>
+<td><code>&lt;i class="fl-smartos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf34b</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/smartos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Solus</td>
+<td><code>fl-solus</code></td>
+<td><code>&lt;i class="fl-solus"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf34d</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/solus.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>SteamOS</td>
+<td><code>fl-steamos</code></td>
+<td><code>&lt;i class="fl-steamos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf34e</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/steamos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Tails</td>
+<td><code>fl-tails</code></td>
+<td><code>&lt;i class="fl-tails"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf34f</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/tails.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Trisquel GNU/Linux</td>
+<td><code>fl-trisquel</code></td>
+<td><code>&lt;i class="fl-trisquel"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf350</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/trisquel.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>TrueNAS core</td>
+<td><code>fl-truenas-core</code></td>
+<td><code>&lt;i class="fl-truenas-core"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf351</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/truenas-core.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>TrueOS</td>
+<td><code>fl-trueos</code></td>
+<td><code>&lt;i class="fl-trueos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf352</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/trueos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Tux</td>
+<td><code>fl-tux</code></td>
+<td><code>&lt;i class="fl-tux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf300</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/tux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Tuxedo OS</td>
+<td><code>fl-tuxedoos</code></td>
+<td><code>&lt;i class="fl-tuxedoos"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf353</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/tuxedoos.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Ubuntu</td>
+<td><code>fl-ubuntu</code></td>
+<td><code>&lt;i class="fl-ubuntu"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf354</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ubuntu.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Ubuntu Budgie</td>
+<td><code>fl-ubuntu-budgie</code></td>
+<td><code>&lt;i class="fl-ubuntu-budgie"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf358</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ubuntu-budgie.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Ubuntu Kylin</td>
+<td><code>fl-ubuntu-kylin</code></td>
+<td><code>&lt;i class="fl-ubuntu-kylin"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf359</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ubuntu-kylin.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Ubuntu Mate</td>
+<td><code>fl-ubuntu-mate</code></td>
+<td><code>&lt;i class="fl-ubuntu-mate"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf35a</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ubuntu-mate.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Ubuntu Studio</td>
+<td><code>fl-ubuntu-studio</code></td>
+<td><code>&lt;i class="fl-ubuntu-studio"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf35b</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ubuntu-studio.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Ubuntu Unity</td>
+<td><code>fl-ubuntu-unity</code></td>
+<td><code>&lt;i class="fl-ubuntu-unity"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf36e</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ubuntu-unity.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Ultimate Edition</td>
+<td><code>fl-ultimateedition</code></td>
+<td><code>&lt;i class="fl-ultimateedition"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf35c</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ultimateedition.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Ultramarine</td>
+<td><code>fl-ultramarine</code></td>
+<td><code>&lt;i class="fl-ultramarine"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf35d</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/ultramarine.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Vanilla OS</td>
+<td><code>fl-vanilla</code></td>
+<td><code>&lt;i class="fl-vanilla"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf35e</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/vanilla.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Void Linux</td>
+<td><code>fl-voidlinux</code></td>
+<td><code>&lt;i class="fl-voidlinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf35f</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/voidlinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>VXlinux</td>
+<td><code>fl-vxlinux</code></td>
+<td><code>&lt;i class="fl-vxlinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf360</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/vxlinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Whonix</td>
+<td><code>fl-whonix</code></td>
+<td><code>&lt;i class="fl-whonix"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf361</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/whonix.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><code>fl-windows</code></td>
+<td><code>&lt;i class="fl-windows"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf362</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/windows.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>XeroLinux</td>
+<td><code>fl-xerolinux</code></td>
+<td><code>&lt;i class="fl-xerolinux"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf363</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/xerolinux.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Xubuntu</td>
+<td><code>fl-xubuntu</code></td>
+<td><code>&lt;i class="fl-xubuntu"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf357</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/xubuntu.svg" width="24" data-colorize></td>
+</tr>
+<tr>
+<td>Zorin OS</td>
+<td><code>fl-zorin</code></td>
+<td><code>&lt;i class="fl-zorin"&gt;&lt;/i&gt;</code></td>
+<td style="text-align: center;"><code>0xf364</code></td>
+<td
+style="text-align: center;"><img src="https://raw.githubusercontent.com/oSoWoSo/quickemu-font-and-logos/refs/heads/quickemu/vectors/zorin.svg" width="24" data-colorize></td>
+</tr>
+</tbody>
+</table>
+<h2 id="building">Building</h2>
+<p>Make sure you have the following dependencies installed:</p>
+<ul>
+<li>Node, Python and jq to run the build scripts</li>
+<li><a href="//fontforge.org">FontForge</a> to generate the fonts</li>
+<li><a href="http://wkhtmltopdf.org/">wkhtmltopdf</a> to generate this
+readme's preview image</li>
+</ul>
+<p>Then run <code>npm install</code>/<code>yarn install</code> and
+<code>make</code>.</p>
+<h2 id="releasing">Releasing</h2>
+<p>If you are a maintainer of this repository and a new release is to be
+published</p>
+<ul>
+<li>Make sure all PRs (that shall be pulled) are pulled
+<ul>
+<li>The PRs add new <code>svg</code>s in <code>vectors/</code></li>
+<li>The <code>icons.tsv</code> is ammended (i.e. new icons added at the
+bottom)</li>
+</ul></li>
+<li>Every time the <code>svg</code>s or <code>icons.tsv</code> is
+touched in the <code>master</code> branch (i.e. through pulling) the
+preview image is updated</li>
+<li>Note that the <code>README.md</code> is NOT updated. You can
+manually modify it do indicate/add recently added but not released
+icons.</li>
+<li>Once the release seems ready:</li>
+<li>Edit the version number in <code>package.json</code> (and push that
+change to <code>master</code>)</li>
+<li>Trigger the "Draft a Release" workflow manually on the Actions page
+(on the <code>master</code> branch)
+<ul>
+<li>The workflow will add a git tag for the release</li>
+</ul></li>
+<li>Go to the releases list and find the draft release
+<ul>
+<li>Edit the description etc pp and finally</li>
+<li>Push "publish release"</li>
+<li>The release is published on Github</li>
+</ul></li>
+<li>Automatically the "Update README" workflow is triggered
+<ul>
+<li>The <code>README.md</code> is regenerated (the preview should
+already be up to date, see above)</li>
+</ul></li>
+<li>Automatically the "Publish release to npm" workflow is triggered
+<ul>
+<li>If the npm token is not expired the release is pushed to NPM</li>
+<li>You need to publish on NPM manually if token is expired
+(expected)</li>
+</ul></li>
+</ul>
+<script>
+(function () {
+  function hexToRgb(hex) {
+    hex = hex.trim().replace(/^#/, '');
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return [n >> 16 & 255, n >> 8 & 255, n & 255];
+  }
+
+  function clamp(v, min, max) {
+    return Math.min(Math.max(v, min), max);
+  }
+
+  function Color(r, g, b) {
+    this.r = r / 255;
+    this.g = g / 255;
+    this.b = b / 255;
+  }
+
+  Color.prototype.applyFilter = function (funcs) {
+    let [r, g, b] = [this.r * 255, this.g * 255, this.b * 255];
+
+    function multiply(matrix) {
+      const nr = clamp(r * matrix[0] + g * matrix[1] + b * matrix[2], 0, 255);
+      const ng = clamp(r * matrix[3] + g * matrix[4] + b * matrix[5], 0, 255);
+      const nb = clamp(r * matrix[6] + g * matrix[7] + b * matrix[8], 0, 255);
+      r = nr; g = ng; b = nb;
+    }
+
+    function hueRotate(angle) {
+      const a = angle / 180 * Math.PI;
+      const sin = Math.sin(a), cos = Math.cos(a);
+      multiply([
+        0.213 + cos*0.787 - sin*0.213, 0.715 - cos*0.715 - sin*0.715, 0.072 - cos*0.072 + sin*0.928,
+        0.213 - cos*0.213 + sin*0.143, 0.715 + cos*0.285 + sin*0.140, 0.072 - cos*0.072 - sin*0.283,
+        0.213 - cos*0.213 - sin*0.787, 0.715 - cos*0.715 + sin*0.715, 0.072 + cos*0.928 + sin*0.072,
+      ]);
+    }
+
+    function sepia(v) {
+      multiply([
+        0.393 + 0.607*(1-v), 0.769 - 0.769*(1-v), 0.189 - 0.189*(1-v),
+        0.349 - 0.349*(1-v), 0.686 + 0.314*(1-v), 0.168 - 0.168*(1-v),
+        0.272 - 0.272*(1-v), 0.534 - 0.534*(1-v), 0.131 + 0.869*(1-v),
+      ]);
+    }
+
+    function saturate(v) {
+      multiply([
+        0.213 + 0.787*v, 0.715 - 0.715*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 + 0.285*v, 0.072 - 0.072*v,
+        0.213 - 0.213*v, 0.715 - 0.715*v, 0.072 + 0.928*v,
+      ]);
+    }
+
+    for (const [fn, val] of funcs) {
+      if (fn === 'invert')    { r = clamp((1-r/255)*255*val + r/255*255*(1-val),0,255); g = clamp((1-g/255)*255*val + g/255*255*(1-val),0,255); b = clamp((1-b/255)*255*val + b/255*255*(1-val),0,255); }
+      if (fn === 'sepia')     sepia(val);
+      if (fn === 'saturate')  saturate(val);
+      if (fn === 'hueRotate') hueRotate(val);
+      if (fn === 'brightness'){ r = clamp(r*val,0,255); g = clamp(g*val,0,255); b = clamp(b*val,0,255); }
+    }
+
+    return new Color(r, g, b);
+  };
+
+  function loss(result, target) {
+    return (
+      Math.pow(result.r*255 - target.r*255, 2) +
+      Math.pow(result.g*255 - target.g*255, 2) +
+      Math.pow(result.b*255 - target.b*255, 2)
+    );
+  }
+
+  function solve(target) {
+    function css(v) {
+      return [
+        ['invert',    clamp(v[0], 0, 1)],
+        ['sepia',     clamp(v[1], 0, 1)],
+        ['saturate',  clamp(v[2], 0, 20)],
+        ['hueRotate', clamp(v[3], 0, 360)],
+        ['brightness',clamp(v[4], 0, 10)],
+        ['brightness',clamp(v[5], 0, 10)],
+      ];
+    }
+
+    function score(v) {
+      return loss(new Color(0,0,0).applyFilter(css(v)), target);
+    }
+
+    let best = null, bestScore = Infinity;
+    for (let i = 0; i < 30; i++) {
+      let v = [Math.random(), Math.random(), Math.random()*10, Math.random()*360, Math.random()*2, Math.random()*2];
+      for (let step = 1; step > 0.0001; step *= 0.9) {
+        for (let j = 0; j < v.length; j++) {
+          const orig = v[j];
+          v[j] += step * (Math.random() > 0.5 ? 1 : -1);
+          const s = score(v);
+          if (s < bestScore) { bestScore = s; best = [...v]; }
+          else v[j] = orig;
+        }
+      }
+    }
+
+    const f = css(best);
+    return [
+      `invert(${(clamp(f[0][1],0,1)*100).toFixed(0)}%)`,
+      `sepia(${(clamp(f[1][1],0,1)*100).toFixed(0)}%)`,
+      `saturate(${(clamp(f[2][1],0,20)*100).toFixed(0)}%)`,
+      `hue-rotate(${clamp(f[3][1],0,360).toFixed(0)}deg)`,
+      `brightness(${(clamp(f[4][1],0,10)*100).toFixed(0)}%)`,
+      `brightness(${(clamp(f[5][1],0,10)*100).toFixed(0)}%)`,
+    ].join(' ');
+  }
+
+  // Cache solved filters per color so theme switching is instant
+  const cache = {};
+
+  function applyIconColor() {
+    const raw = getComputedStyle(document.documentElement)
+      .getPropertyValue('--color-icon').trim();
+    if (!raw) return false;
+
+    let rgb;
+    if (raw.startsWith('#')) {
+      rgb = hexToRgb(raw);
+    } else if (raw.startsWith('rgb')) {
+      rgb = raw.match(/\d+/g).map(Number).slice(0, 3);
+    } else {
+      return false;
+    }
+
+    const key = rgb.join(',');
+    if (!cache[key]) {
+      cache[key] = solve(new Color(...rgb));
+    }
+
+    document.documentElement.style.setProperty('--filter-icon', cache[key]);
+    return true;
+  }
+
+  function init() {
+    if (!applyIconColor()) return;
+
+    // Watch for data-theme attribute changes on <html> — re-apply immediately
+    new MutationObserver(function(mutations) {
+      for (const m of mutations) {
+        if (m.attributeName === 'data-theme') {
+          applyIconColor();
+          break;
+        }
+      }
+    }).observe(document.documentElement, { attributes: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+</body>
+</html>
